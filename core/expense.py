@@ -17,10 +17,6 @@ class Expense:
     expense_date: date
 
     def __post_init__(self):
-        """
-        FIXME: Revisen si falta algo que comprobar...
-        """
-
         if self.title == "":
             raise EmptyTitleError("El título no puede estar vacío")
 

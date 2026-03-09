@@ -31,6 +31,7 @@ def manager_with_one_expense(context, amount):
 def add_expense(context, amount, title):
     context["service"].create_expense(
         title=title, amount=amount, description="", expense_date=date.today()
+
     )
 
 
@@ -46,7 +47,7 @@ def check_total(context, total):
 
 @then(parsers.parse("{month_name} debe sumar {expected_total:d} euros"))
 def check_month_total(context, month_name, expected_total):
-    total_actual = context["totals"].get(month_name, 0)
+    total_actual = context["service"].total_by_month()[month_name]
     assert total_actual == expected_total
 
 
@@ -54,3 +55,8 @@ def check_month_total(context, month_name, expected_total):
 def check_expenses_length(context, expenses):
     total = len(context["db"]._expenses)
     assert expenses == total
+
+
+@then(parsers.parse("el gasto con id {expense_id:d} debe tener el titulo {title}"))
+def check_titel(context, expense_id, title):
+    assert context["service"].list_expenses()[expense_id - 1].title == title
